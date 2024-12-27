@@ -44,38 +44,41 @@ public class WcTool implements Callable<Integer> {
     private String fileName;
 
     @Override
-    public Integer call() {
-        if (stdin && fileName != "-") {
-            System.err.println("ownwctool: missing file operand -");
-            return 3;
-        }
+    public Integer call() {        
 
         if (stdin && multipleFiles) {
             System.err.println("ownwctool: -s and -x are mutually exclusive");
+            return 3;
+        }
+        if (stdin && fileName != "-") {
+            System.err.println("ownwctool: missing file operand -");
             return 4;
         }
 
          try {
+            Set<String> files = new HashSet<>();
+
             if (stdin) {
-                Set<String> files = getFilesFromStdin();
-                FileProcessor fileProcessor = new FileProcessor(files, new OptionBuilder()
-                        .showChars(showChars)
-                        .showLines(showLines)
-                        .showWords(showWords)
-                        .showBytes(showBytes)
-                        .multipleFiles(multipleFiles)
-                        .build());
-                fileProcessor.process().forEach(System.out::println);
-                return 0;
+                files = getFilesFromStdin();
+            } else {               
+                files.add(fileName);
             }
-            FileProcessor fileProcessor = new FileProcessor(fileName, new OptionBuilder()
+
+            if(files.isEmpty()) {
+                System.err.println("ownwctool: No files to process");
+                return 5;
+            }
+                           
+            FileProcessor fileProcessor = new FileProcessor(files, new OptionBuilder()
                     .showChars(showChars)
                     .showLines(showLines)
                     .showWords(showWords)
                     .showBytes(showBytes)
                     .multipleFiles(multipleFiles)
                     .build());
+                    
             fileProcessor.process().forEach(System.out::println);
+
         } catch (IllegalArgumentException e) {
             System.err.println("ownwctool: " + e.getMessage());
             return 1 ;
