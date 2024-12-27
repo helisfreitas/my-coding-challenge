@@ -1,3 +1,5 @@
+[![Java CI with Maven](https://github.com/helisfreitas/my-coding-challenge/actions/workflows/maven.yml/badge.svg)](https://github.com/helisfreitas/my-coding-challenge/actions/workflows/maven.yml)
+
 # My Coding challenges
 
 This repository has solutions for the coding challenges from [Coding Challenges](https://codingchallenges.fyi/), created by John Cricket. These challenges are like real-world problems and are a great way to improve your coding skills, learn new tools, and sharpen your techniques.
